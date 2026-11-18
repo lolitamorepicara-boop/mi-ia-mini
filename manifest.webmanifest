@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "MI IA MINI",
+  "short_name": "MI IA MINI",
+  "description": "Asistente personal privado y listo para funcionar sin conexión.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#101114",
+  "theme_color": "#101114",
+  "icons": [
+    { "src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101114" />
+    <meta name="description" content="MI IA MINI: asistente personal privado que funciona también sin conexión." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>MI IA MINI</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#chat" aria-label="MI IA MINI, inicio">
+          <span class="brand-mark" aria-hidden="true">✦</span>
+          <span>MI IA <strong>MINI</strong></span>
+        </a>
+        <div class="topbar-actions">
+          <span id="connection-status" class="status-pill"><span class="status-dot"></span>Preparando…</span>
+          <button id="install-button" class="button button-subtle hidden" type="button">Instalar</button>
+          <button id="settings-button" class="icon-button" type="button" aria-label="Abrir configuración" title="Configuración">⚙</button>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <aside class="sidebar" aria-label="Navegación principal">
+          <button class="nav-item active" data-view="chat" type="button"><span>◉</span> Chat personal</button>
+          <button class="nav-item" data-view="library" type="button"><span>▧</span> Mi biblioteca <span id="photo-count" class="count">0</span></button>
+          <div class="sidebar-note"><span class="privacy-icon">◈</span><p><strong>Privado por diseño</strong><br />Tus fotos permanecen en este dispositivo. Nada se envía automáticamente.</p></div>
+          <div class="sidebar-footer">MI IA MINI <span>·</span> versión 1.0</div>
+        </aside>
+
+        <main class="main-content">
+          <section id="chat-view" class="view active" aria-labelledby="chat-title">
+            <div class="view-heading">
+              <div><p class="eyebrow">TU ESPACIO PERSONAL</p><h1 id="chat-title">Hola, ¿en qué te ayudo?</h1><p class="subtitle">Un asistente sencillo, listo incluso sin Internet.</p></div>
+              <button id="new-chat-button" class="button button-subtle" type="button">＋ Nuevo chat</button>
+            </div>
+            <div id="chat-messages" class="chat-messages" aria-live="polite" aria-label="Conversación"></div>
+            <form id="chat-form" class="composer">
+              <div id="attachment-preview" class="attachment-preview hidden"></div>
+              <label class="attach-button" for="photo-input" title="Adjuntar fotografía" aria-label="Adjuntar fotografía">＋</label>
+              <input id="photo-input" class="visually-hidden" type="file" accept="image/*" capture="environment" />
+              <textarea id="message-input" rows="1" maxlength="4000" placeholder="Escribe un mensaje…" aria-label="Escribe un mensaje"></textarea>
+              <button class="send-button" type="submit" aria-label="Enviar mensaje" title="Enviar">↑</button>
+              <p class="composer-hint">Tus mensajes se guardan solo en este dispositivo.</p>
+            </form>
+          </section>
+
+          <section id="library-view" class="view" aria-labelledby="library-title" hidden>
+            <div class="view-heading">
+              <div><p class="eyebrow">ALMACENAMIENTO LOCAL</p><h1 id="library-title">Mi biblioteca</h1><p class="subtitle">Fotografías privadas guardadas en este dispositivo.</p></div>
+              <label class="button button-primary upload-label" for="library-input">＋ Añadir fotos</label>
+              <input id="library-input" class="visually-hidden" type="file" accept="image/*" multiple />
+            </div>
+            <p class="local-notice">Las imágenes no se suben a ningún servidor. Puedes eliminarlas cuando quieras.</p>
+            <div id="photo-grid" class="photo-grid"></div>
+            <div id="library-empty" class="empty-state"><span>▧</span><h2>Tu biblioteca está vacía</h2><p>Añade una foto para guardarla de forma privada en este dispositivo.</p></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <dialog id="settings-dialog" class="settings-dialog">
+      <form method="dialog" class="dialog-header"><div><p class="eyebrow">EN ESTE DISPOSITIVO</p><h2>Privacidad y ajustes</h2></div><button class="icon-button" aria-label="Cerrar configuración">×</button></form>
+      <div class="settings-content">
+        <div class="setting-card"><h3>Privacidad</h3>
+          <label class="toggle-row"><span><strong>Guardar conversaciones</strong><small>Conserva el chat en este dispositivo.</small></span><input id="save-chat-setting" type="checkbox" checked /></label>
+          <label class="toggle-row"><span><strong>Guardar fotos en biblioteca</strong><small>Las fotos se guardan localmente solo si lo permites.</small></span><input id="save-photos-setting" type="checkbox" checked /></label>
+          <p class="setting-caption">La app no transmite fotos automáticamente. El análisis básico se hace localmente.</p>
+        </div>
+        <div class="setting-card"><h3>Servidor privado (opcional)</h3><p class="setting-caption">Vacío por defecto. Solo se contacta cuando configuras el servidor y pulsas una acción de generación o edición.</p>
+          <label class="field-label" for="endpoint-input">URL del endpoint privado</label><input id="endpoint-input" class="text-field" type="url" inputmode="url" placeholder="https://tu-servidor-privado/ai" autocomplete="url" />
+          <button id="save-settings-button" class="button button-primary full-width" type="button">Guardar ajustes</button>
+        </div>
+        <div class="setting-card danger-card"><h3>Datos locales</h3><p class="setting-caption">Elimina conversaciones y fotografías almacenadas por MI IA MINI en este navegador.</p><button id="clear-data-button" class="button button-danger" type="button">Borrar todos mis datos</button></div>
+        <p id="settings-feedback" class="feedback" role="status"></p>
+      </div>
+    </dialog>
+
+    <input id="library-input-hidden" class="visually-hidden" type="file" accept="image/*" multiple />
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
